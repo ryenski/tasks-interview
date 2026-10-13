@@ -7,6 +7,18 @@ RSpec.describe "Tasks", type: :request do
     post session_path, params: {session: {email: user.email, password: user.password}}
   end
 
+  describe "GET /tasks" do
+    it "lists tasks and renders the new-task form" do
+      task = create(:task)
+
+      get tasks_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(task.title)
+      expect(response.parsed_body.at("form#new_task")).to be_present
+    end
+  end
+
   describe "POST /tasks" do
     it "creates the task and redirects to the index" do
       expect {
