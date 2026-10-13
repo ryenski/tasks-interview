@@ -3,4 +3,6 @@ class Task < ApplicationRecord
 
   validates :title, presence: true
   validates :assignee, presence: true, if: -> { assignee_id.present? }
+
+  scope :for_list, -> { includes(:assignee).order(:created_at) }
 end
