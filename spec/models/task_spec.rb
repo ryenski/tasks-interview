@@ -11,4 +11,8 @@ RSpec.describe Task, type: :model do
     expect(task).not_to be_valid
     expect(task.errors[:title]).to include("can't be blank")
   end
+
+  it "starts incomplete" do
+    expect(Task.new.complete).to be(false)
+  end
 end

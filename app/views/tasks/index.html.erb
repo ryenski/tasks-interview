@@ -7,6 +7,11 @@
       <div><%= task.complete? ? "Complete" : "Incomplete" %></div>
       <div class="italic"><%= task.description&.truncate(50) %></div>
       <div class="flex gap-x-2">
+        <%= button_to task.complete? ? "Mark incomplete" : "Mark complete",
+              task_path(task),
+              method: :patch,
+              params: { task: { complete: !task.complete? } },
+              class: "underline cursor-pointer" %>
         <%= link_to "Edit", edit_task_path(task) %>
         <%= link_to "Delete", task_path(task), data: { turbo_method: "delete" } %>
       </div>

@@ -57,4 +57,47 @@ RSpec.describe "Tasks", type: :request do
       expect(response.body).to include("Title can&#39;t be blank")
     end
   end
+
+  describe "marking a task complete or incomplete" do
+    it "marks an incomplete task complete" do
+      task = create(:task, complete: false)
+
+      patch task_path(task), params: {task: {complete: true}}
+
+      expect(task.reload).to be_complete
+      expect(response).to redirect_to(tasks_path)
+    end
+
+    it "marks a complete task incomplete" do
+      task = create(:task, complete: true)
+
+      patch task_path(task), params: {task: {complete: false}}
+
+      expect(task.reload).not_to be_complete
+      expect(response).to redirect_to(tasks_path)
+    end
+
+    it "re-renders the edit form with errors when the task has no title" do
+      task = build(:task, title: "")
+      task.save!(validate: false)
+
+      patch task_path(task), params: {task: {complete: true}}
+
+      expect(task.reload).not_to be_complete
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("Title can&#39;t be blank")
+    end
+  end
+
+  describe "GET /tasks" do
+    it "offers to mark each task complete or incomplete" do
+      create(:task, complete: false)
+      create(:task, complete: true)
+
+      get tasks_path
+
+      expect(response.body).to include("Mark complete")
+      expect(response.body).to include("Mark incomplete")
+    end
+  end
 end
