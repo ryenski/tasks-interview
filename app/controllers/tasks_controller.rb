@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :authenticate_user
 
   def index
-    @tasks = Task.all
+    @tasks = Task.order(:created_at)
     @task = Task.new
   end
 
@@ -16,7 +16,7 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to tasks_path
     else
-      @tasks = Task.all
+      @tasks = Task.order(:created_at)
       render :index, status: :unprocessable_entity
     end
   end
