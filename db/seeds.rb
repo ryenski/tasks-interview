@@ -3,13 +3,13 @@
 #
 # All accounts share the password "abc123" so any of them can be used to log in.
 
-[
+users = [
   "Ada Lovelace",
   "Grace Hopper",
   "Katherine Johnson",
   "Alan Turing",
   "Edsger Dijkstra"
-].each_with_index do |name, index|
+].each_with_index.map do |name, index|
   User.where(email: "user#{index + 1}@tern.travel").first_or_create!(
     name: name,
     password: "abc123",
@@ -40,8 +40,11 @@ tasks = [
   {title: "follow up with Lisbon hotel", complete: false, description: "Lowercase on purpose — still waiting on the room upgrade."}
 ]
 
-tasks.each do |attributes|
-  Task.where(title: attributes[:title]).first_or_create!(attributes.except(:title))
+# Spread assignees across users, leaving every fourth task unassigned, so the
+# index shows both states.
+tasks.each_with_index do |attributes, index|
+  assignee = users[index % users.size] unless (index % 4).zero?
+  Task.where(title: attributes[:title]).first_or_create!(attributes.except(:title).merge(assignee:))
 end
 
 legacy_tasks = [

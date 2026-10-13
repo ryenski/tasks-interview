@@ -19,3 +19,11 @@ _Avoid_: Open, pending, uncompleted
 **Mark complete / Mark incomplete**:
 Moving a Task between the Complete and Incomplete states.
 _Avoid_: Close, reopen, check off, un-complete
+
+**Assignee**:
+The User responsible for a Task. A Task has at most one Assignee and can be assigned to any User.
+_Avoid_: Owner, responsible
+
+**Unassigned**:
+A Task with no Assignee; every Task starts here unless one is chosen.
+_Avoid_: Unowned, nobody

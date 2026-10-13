@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :authenticate_user
 
   def index
-    @tasks = Task.order(:created_at)
+    @tasks = Task.for_list
     @task = Task.new
   end
 
@@ -16,7 +16,7 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to tasks_path
     else
-      @tasks = Task.order(:created_at)
+      @tasks = Task.for_list
       render :index, status: :unprocessable_entity
     end
   end
@@ -44,6 +44,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :complete)
+    params.require(:task).permit(:title, :description, :complete, :assignee_id)
   end
 end
