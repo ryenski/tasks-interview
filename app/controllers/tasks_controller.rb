@@ -3,6 +3,7 @@ class TasksController < ApplicationController
 
   def index
     @tasks = Task.all
+    @task = Task.new
   end
 
   def edit
@@ -15,7 +16,8 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to tasks_path
     else
-      # TODO: handle
+      @tasks = Task.all
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -25,7 +27,7 @@ class TasksController < ApplicationController
     if @task.update(task_params)
       redirect_to tasks_path
     else
-      # TODO: handle
+      render :edit, status: :unprocessable_entity
     end
   end
 
